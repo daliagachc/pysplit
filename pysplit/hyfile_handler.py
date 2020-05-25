@@ -212,19 +212,22 @@ def _trajsplit(hydata, pathdata, timedata, century):
 
     """
     # Find number of unique trajectories within `hydata`
-    unique_traj = np.unique(hydata[:, 0])
+    traj_number = hydata[:, 0]
+    unique_traj = np.unique(traj_number)
 
     # Sort the array row-wise by the first column
     # Timepoints from same traj now grouped together
-    sorted_indices = np.argsort(hydata[:, 0], kind='mergesort')
+    sorted_indices = np.argsort(traj_number, kind='mergesort')
     sorted_hydata = hydata[sorted_indices, :]
     sorted_pathdata = pathdata[sorted_indices, :]
     sorted_timedata = timedata[sorted_indices, :]
+    sorted_traj_number = traj_number[sorted_indices]
 
     # Find first occurrence of each traj, except for the first
     # which is obviously 0
-    first_occurrence = [np.nonzero(sorted_indices == u)[0][0]
-                        for u in unique_traj[1:]]
+    # this is wrong and blotted
+    first_occurrence = [np.nonzero(sorted_traj_number == u)[0][0]
+                        for u in unique_traj[:]][1:]
 
     # Split `hydata` and `pathdata` into list of arrays, one
     # array per traj.  May or may not be equal sizes

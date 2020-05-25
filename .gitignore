@@ -2,3 +2,5 @@
 *version.py
 *.egg-info*
 *.coverage
+.idea
+.ipynb_checkpoints

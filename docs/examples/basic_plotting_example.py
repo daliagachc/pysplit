@@ -1,3 +1,18 @@
+# ---
+# jupyter:
+#   jupytext:
+#     text_representation:
+#       extension: .py
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.4.0
+#   kernelspec:
+#     display_name: pysplit
+#     language: python
+#     name: pysplit
+# ---
+
+# %%
 """
 =============================================
 Basic Trajectory Plotting and Using MapDesign
@@ -10,10 +25,14 @@ For this example we'll initialize only the January trajectories created in
 ``bulk_trajgen_example.py``.
 
 """
+# %%
+
 import pysplit
 
-trajgroup = pysplit.make_trajectorygroup(r'C:/trajectories/colgate/*jan*')
+# %%
+trajgroup = pysplit.make_trajectorygroup('/Users/diego/pysplit/example_data/Archive/*')
 
+# %%
 """
 Basemaps and MapDesign
 ----------------------
@@ -29,7 +48,7 @@ The ``standard_pm``, a list of standard parallels and meridians,
 may be passed as ``None``.
 
 """
-mapcorners =  [-150, 15, -50, 65]
+mapcorners =  [10, 50, 80, 90]
 standard_pm = None
 
 bmap_params = pysplit.MapDesign(mapcorners, standard_pm)
@@ -50,13 +69,22 @@ For this example, we will color-code by initialization (t=0) altitude,
 We can store the trajectory color in ``Trajectory.trajcolor`` for convenience.
 
 """
-color_dict = {500.0 : 'blue',
-              1000.0 : 'orange',
-              1500.0 : 'black'}
+# %%
+
+color_dict = {
+    100.0: 'red',
+    250.0: 'pink',
+    300.0 : 'white',
+    500.0 : 'blue',
+    400.0 : 'orange',
+    1500.0 : 'black'}
+# %%
 
 for traj in trajgroup:
     altitude0 = traj.data.geometry.apply(lambda p: p.z)[0]
+#     print(altitude0)
     traj.trajcolor = color_dict[altitude0]
+# %%
 
 """
 For display purposes, let's plot only every fifth ``Trajectory``.  The lats,
@@ -66,3 +94,8 @@ lons are obtained by unpacking the ``Trajectory.Path``
 """
 for traj in trajgroup[::5]:
     bmap.plot(*traj.path.xy, c=traj.trajcolor, latlon=True, zorder=20)
+
+import matplotlib.pyplot as plt
+plt.show()
+
+# %%
